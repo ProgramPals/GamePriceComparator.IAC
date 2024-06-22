@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../..
+      dockerfile: GamePriceComparator.IAC/Docker/Dockerfile.FE
+    ports:
+      - "3000:80"
+    volumes:
+      - ../../GamePriceComparator.FE.react18:/app
+    environment:
+      - NODE_ENV=development
+
+  api:
+    build:
+      context: ../..
+      dockerfile: GamePriceComparator.IAC/Docker/Dockerfile.BE
+    ports:
+      - "5001:8080"
+    volumes:
+      - ../../GamePriceComparator.BE.dotnet8:/src/GamePriceComparator.BE.dotnet8
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+volumes:
+  pgdata:
+

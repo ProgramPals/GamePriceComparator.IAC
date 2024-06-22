@@ -1,0 +1,28 @@
+# Use Node.js 18 for the build stage
+FROM node:18 AS build
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@9.4.0
+
+# Copy pnpm lockfile and package.json
+COPY ["GamePriceComparator.FE.react18/pnpm-lock.yaml", "GamePriceComparator.FE.react18/package.json", "./"]
+
+# Install dependencies
+RUN pnpm install
+
+# Copy the rest of the project files
+COPY ./GamePriceComparator.FE.react18 .
+
+# Build the project
+RUN pnpm build
+
+# Use nginx to serve the built files
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+

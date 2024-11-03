@@ -1,9 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-deployment
+  name: recreate-deployment
 spec:
-  replicas: 3
+  replicas: 4
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: my-app

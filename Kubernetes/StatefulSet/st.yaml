@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-db
+spec:
+  serviceName: "my-db-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-db
+  template:
+    metadata:
+      labels:
+        app: my-db
+    spec:
+      containers:
+      - name: db
+        image: mysl:5.7
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/mysql
+volumeClaimTemplates:
+- metadata:
+    name: db-data
+  spec:
+    accessModes: ["ReadWriteOnce"]
+    resources:
+      requests:
+        storage: 1Gi
+

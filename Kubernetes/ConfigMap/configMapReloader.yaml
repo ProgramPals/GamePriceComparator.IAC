@@ -1,0 +1,21 @@
+// the problem with config map is after chang it doesnt automatically reload pods
+// one have to reload applications 
+// one can use some sidecar container to watch for changes
+// there are ready options like reloader
+// reloader has to be installed with helm as package
+
+// helm repo add stakater https://stakater.github.io/stakater-charts
+// helm install reloader stakater/reloader
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+  annotations:
+    reloader.stakater.com/match: "true"
+spec:
+  template:
+    metadata:
+      annotations:
+        configmap.reloader.stakater.com/reload: "my-app-config"
+

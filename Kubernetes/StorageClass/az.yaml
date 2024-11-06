@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard-azure
+provisioner: kubernetes.io/azure-disk
+parameters:
+  storageaccouttype: Standard_LRS
+  kind: managed
+reclaimPolicy: Delete
+
